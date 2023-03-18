@@ -1,15 +1,12 @@
-import 'package:first_app/Screen/loginScreen/controller/login_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:get/instance_manager.dart';
 import 'package:lottie/lottie.dart';
 
-import '../controller/lottie_splash_controller.dart';
+
 
 class SplashScreen extends StatelessWidget {
   SplashScreen({super.key});
 
-  final controller = Get.put(SplashController());
-  final splashController = Get.put(LoginController());
+ 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
