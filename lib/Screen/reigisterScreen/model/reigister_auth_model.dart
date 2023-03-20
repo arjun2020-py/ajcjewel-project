@@ -4,58 +4,43 @@
 
 import 'dart:convert';
 
-RegisterAuthModel registerAuthModelFromJson(String str) => RegisterAuthModel.fromJson(json.decode(str));
+RegisterAuthModel registerAuthModelFromJson(String str) =>
+    RegisterAuthModel.fromJson(json.decode(str));
 
-String registerAuthModelToJson(RegisterAuthModel data) => json.encode(data.toJson());
+String registerAuthModelToJson(RegisterAuthModel data) =>
+    json.encode(data.toJson());
 
 class RegisterAuthModel {
-    RegisterAuthModel({
-        required this.array,
-    });
+  RegisterAuthModel({
+    required this.name,
+    required this.email,
+    required this.mobile,
+    required this.textCode,
+    required this.dataGuard,
+  });
 
-    List<Array> array;
+  String name;
+  String email;
+  String mobile;
+  String textCode;
+  List<List<dynamic>> dataGuard;
 
-    factory RegisterAuthModel.fromJson(Map<String, dynamic> json) => RegisterAuthModel(
-        array: List<Array>.from(json["array"].map((x) => Array.fromJson(x))),
-    );
-
-    Map<String, dynamic> toJson() => {
-        "array": List<dynamic>.from(array.map((x) => x.toJson())),
-    };
-}
-
-class Array {
-    Array({
-        required this.name,
-        required this.code,
-        required this.fileOriginalName,
-        required this.description,
-        required this.groupId,
-        required this.dataGuard,
-    });
-
-    String? name;
-    int? code;
-    String? fileOriginalName;
-    String? description;
-    String? groupId;
-    List<List<dynamic>> dataGuard;
-
-    factory Array.fromJson(Map<String, dynamic> json) => Array(
+  factory RegisterAuthModel.fromJson(Map<String, dynamic> json) =>
+      RegisterAuthModel(
         name: json["name"],
-        code: json["code"],
-        fileOriginalName: json["fileOriginalName"],
-        description: json["description"],
-        groupId: json["groupId"],
-        dataGuard: List<List<dynamic>>.from(json["dataGuard"].map((x) => List<dynamic>.from(x.map((x) => x)))),
-    );
+        email: json["email"],
+        mobile: json["mobile"],
+        textCode: json["textCode"],
+        dataGuard: List<List<dynamic>>.from(
+            json["dataGuard"].map((x) => List<dynamic>.from(x.map((x) => x)))),
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "name": name,
-        "code": code,
-        "fileOriginalName": fileOriginalName,
-        "description": description,
-        "groupId": groupId,
-        "dataGuard": List<dynamic>.from(dataGuard.map((x) => List<dynamic>.from(x.map((x) => x)))),
-    };
+        "email": email,
+        "mobile": mobile,
+        "textCode": textCode,
+        "dataGuard": List<dynamic>.from(
+            dataGuard.map((x) => List<dynamic>.from(x.map((x) => x)))),
+      };
 }

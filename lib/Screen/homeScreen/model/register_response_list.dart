@@ -1,15 +1,15 @@
 // To parse this JSON data, do
 //
-//     final registerResponceModel = registerResponceModelFromJson(jsonString);
+//     final regsiterResponseListModel = regsiterResponseListModelFromJson(jsonString);
 
 import 'dart:convert';
 
-RegisterResponceModel registerResponceModelFromJson(String str) => RegisterResponceModel.fromJson(json.decode(str));
+RegsiterResponseListModel regsiterResponseListModelFromJson(String str) => RegsiterResponseListModel.fromJson(json.decode(str));
 
-String registerResponceModelToJson(RegisterResponceModel data) => json.encode(data.toJson());
+String regsiterResponseListModelToJson(RegsiterResponseListModel data) => json.encode(data.toJson());
 
-class RegisterResponceModel {
-    RegisterResponceModel({
+class RegsiterResponseListModel {
+    RegsiterResponseListModel({
         required this.message,
         required this.data,
     });
@@ -17,7 +17,7 @@ class RegisterResponceModel {
     String message;
     Data data;
 
-    factory RegisterResponceModel.fromJson(Map<String, dynamic> json) => RegisterResponceModel(
+    factory RegsiterResponseListModel.fromJson(Map<String, dynamic> json) => RegsiterResponseListModel(
         message: json["message"],
         data: Data.fromJson(json["data"]),
     );
@@ -30,6 +30,27 @@ class RegisterResponceModel {
 
 class Data {
     Data({
+        required this.list,
+        required this.totalCount,
+    });
+
+    List<ListElement> list;
+    int totalCount;
+
+    factory Data.fromJson(Map<String, dynamic> json) => Data(
+        list: List<ListElement>.from(json["list"].map((x) => ListElement.fromJson(x))),
+        totalCount: json["totalCount"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "list": List<dynamic>.from(list.map((x) => x.toJson())),
+        "totalCount": totalCount,
+    };
+}
+
+class ListElement {
+    ListElement({
+        required this.id,
         required this.name,
         required this.uid,
         required this.email,
@@ -42,10 +63,10 @@ class Data {
         this.updatedUserId,
         required this.updatedAt,
         required this.status,
-        required this.id,
         required this.v,
     });
 
+    String id;
     String name;
     String uid;
     String email;
@@ -58,10 +79,10 @@ class Data {
     dynamic updatedUserId;
     int updatedAt;
     int status;
-    String id;
     int v;
 
-    factory Data.fromJson(Map<String, dynamic> json) => Data(
+    factory ListElement.fromJson(Map<String, dynamic> json) => ListElement(
+        id: json["_id"],
         name: json["_name"],
         uid: json["_uid"],
         email: json["_email"],
@@ -74,11 +95,11 @@ class Data {
         updatedUserId: json["_updatedUserId"],
         updatedAt: json["_updatedAt"],
         status: json["_status"],
-        id: json["_id"],
         v: json["__v"],
     );
 
     Map<String, dynamic> toJson() => {
+        "_id": id,
         "_name": name,
         "_uid": uid,
         "_email": email,
@@ -91,7 +112,6 @@ class Data {
         "_updatedUserId": updatedUserId,
         "_updatedAt": updatedAt,
         "_status": status,
-        "_id": id,
         "__v": v,
     };
 }

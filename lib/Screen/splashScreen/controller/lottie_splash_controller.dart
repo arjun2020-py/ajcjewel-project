@@ -11,7 +11,7 @@ import '../../loginScreen/view/screen_login.dart';
 class SplashController extends GetxController {
   @override
   void onInit() async {
-    await Future.delayed(Duration(milliseconds: 3));
+    await Future.delayed(Duration(seconds: 3));
     navigateToNextScreen();
     super.onInit();
   }

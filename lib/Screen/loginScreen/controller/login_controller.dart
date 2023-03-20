@@ -5,7 +5,6 @@ import 'package:either_dart/either.dart';
 import 'package:first_app/Screen/homeScreen/home_scrren.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../main.dart';
@@ -57,7 +56,7 @@ class LoginController extends GetxController {
       ));
       final _shrepref = await SharedPreferences.getInstance();
       _shrepref.setBool(key.toString(), true);
-      Get.to(const HomeScreen());
+      Get.to( HomeScreen());
     });
   }
 }
