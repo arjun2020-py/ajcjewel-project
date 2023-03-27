@@ -55,8 +55,10 @@ class LoginController extends GetxController {
         icon: Icon(Icons.check_circle),
       ));
       final _shrepref = await SharedPreferences.getInstance();
-      _shrepref.setBool(key.toString(), true);
-      Get.to( HomeScreen());
+      // _shrepref.setBool(key.toString(), true);
+      final v = _shrepref.setString('loginToken', key.toString());
+
+      Get.to(HomeScreen());
     });
   }
 }

@@ -1,49 +1,6 @@
-// To parse this JSON data, do
-//
-//     final regsiterResponseListModel = regsiterResponseListModelFromJson(jsonString);
 
-class RegsiterResponseListModel {
-    RegsiterResponseListModel({
-        required this.message,
-        required this.data,
-    });
-
-    String message;
-    Data data;
-
-    factory RegsiterResponseListModel.fromJson(Map<String, dynamic> json) => RegsiterResponseListModel(
-        message: json["message"],
-        data: Data.fromJson(json["data"]),
-    );
-
-    Map<String, dynamic> toJson() => {
-        "message": message,
-        "data": data.toJson(),
-    };
-}
-
-class Data {
-    Data({
-        required this.list,
-        required this.totalCount,
-    });
-
-    List<ListElement> list;
-    int totalCount;
-
-    factory Data.fromJson(Map<String, dynamic> json) => Data(
-        list: List<ListElement>.from(json["list"].map((x) => ListElement.fromJson(x))),
-        totalCount: json["totalCount"],
-    );
-
-    Map<String, dynamic> toJson() => {
-        "list": List<dynamic>.from(list.map((x) => x.toJson())),
-        "totalCount": totalCount,
-    };
-}
-
-class ListElement {
-    ListElement({
+class RegisterResponse {
+    RegisterResponse({
         required this.id,
         required this.name,
         required this.uid,
@@ -75,7 +32,7 @@ class ListElement {
     int status;
     int v;
 
-    factory ListElement.fromJson(Map<String, dynamic> json) => ListElement(
+    factory RegisterResponse.fromJson(Map<String, dynamic> json) => RegisterResponse(
         id: json["_id"],
         name: json["_name"],
         uid: json["_uid"],

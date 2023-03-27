@@ -19,7 +19,7 @@ class ReigsterRepositry {
         bool isInternetConnection = InternetConnectionChecker().hasListeners;
 
         if (!isInternetConnection) {
-          return Left('No Internet Connection');
+          return const Left('No Internet Connection');
         }
       }
       Response<dynamic> response =
