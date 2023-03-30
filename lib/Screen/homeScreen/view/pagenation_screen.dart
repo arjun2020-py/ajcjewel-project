@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../../Utils/helper/heleper.dart';
-import '../controller/home_list_controller.dart';
+import '../controller/create/home_list_controller.dart';
 
 class PagenationScreen extends StatefulWidget {
   const PagenationScreen({super.key});
@@ -22,22 +22,21 @@ class _PagenationScreenState extends State<PagenationScreen> {
   @override
   void initState() {
     super.initState();
-    //  log('---------------5');
 
     scrollController.addListener(() {
-      log('---------------5');
+      log('---------------1');
 
       if (scrollController.position.atEdge) {
-        log('---------------3');
+        log('---------------2');
 
         //reachs the top of list .
         if (scrollController.position.pixels == 0) {
-          log('---------------4');
+          log('---------------3');
           //reaches the bottom of list.
         } else {
-          log('----------1');
+          log('----------4 pagination happened');
           if (pageController.isMainApiPaginationLoading.value == false) {
-            log('----------2');
+            log('----------5');
 
             pageController.isMainApiPaginationLoading(true);
 
@@ -56,6 +55,19 @@ class _PagenationScreenState extends State<PagenationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    /* return Scaffold(
+      appBar: AppBar(
+        title: Text("pagination".tr),
+      ),
+      body: ListView.builder(
+        controller: scrollController,
+        itemCount: 20,
+        itemBuilder: (context, index) => ListTile(
+          title: Text("Row at " + index.toString()),
+        ),
+      ),
+    );*/
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -67,29 +79,14 @@ class _PagenationScreenState extends State<PagenationScreen> {
         title: TextWidget(txt: 'Pagenation', color: Colors.black, txtSize: 20),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        child: Column(
+      body: Obx(
+        () => Stack(
           children: [
-            Obx(
-              () => Align(
-                  alignment: Alignment.bottomCenter,
-                  child: pageController.isMainApiPaginationLoading.value == true
-                      ? LottieBuilder.network(
-                          'https://assets9.lottiefiles.com/packages/lf20_yK0dMpYzhT.json',
-                          height: 200,
-                          width: 200,
-                        )
-                      : LottieBuilder.network(
-                          'https://assets3.lottiefiles.com/private_files/lf30_n7pcxz8z.json',
-                          height: 200,
-                          width: 200,
-                        )),
-            ),
             Obx(
               () => ListView.builder(
                 controller: scrollController,
                 shrinkWrap: true,
-                physics: AlwaysScrollableScrollPhysics(),
+                physics: const AlwaysScrollableScrollPhysics(),
                 itemCount: pageController.mainData.length,
                 itemBuilder: (BuildContext context, int index) {
                   var userList = pageController.mainData[index];
@@ -115,6 +112,16 @@ class _PagenationScreenState extends State<PagenationScreen> {
                 },
               ),
             ),
+            if (pageController.isMainApiPaginationLoading.value == true)
+              Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Lottie.asset(
+                    'assets/images/98194-loading.json',
+                    height: 150,
+                    width: 150,
+                    repeat: true,
+                    reverse: true,
+                  )),
           ],
         ),
       ),

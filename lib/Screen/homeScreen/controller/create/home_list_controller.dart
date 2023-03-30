@@ -1,11 +1,14 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';
-import 'package:first_app/Screen/homeScreen/model/register_response_list.dart';
+import 'package:first_app/Screen/homeScreen/model/create/register_response_list.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 
-import '../repositry/home_repositry.dart';
+import '../../repositry/home_repositry.dart';
 import 'package:get/get.dart';
 
 class HomeListController extends GetxController {
@@ -16,17 +19,12 @@ class HomeListController extends GetxController {
 
   RxList<ListElement> mainData = <ListElement>[].obs;
 
-  RxList<ListElement> dataList = <ListElement>[].obs;
-  RxInt currentPage = 1.obs;
-
-  //for pagination
-
-  var isMoreDataAvilabel = true.obs;
-
   var searchController = TextEditingController();
   Future<void> registerList(int skip) async {
     isLoading.value = true;
     log('-------------a1');
+
+    isMainApiPaginationLoading.value = true;
 
     Either<String, RegsiterResponseListModel> result =
         await HomeRepositry().RegisterList(searchController.text, skip);
@@ -42,13 +40,6 @@ class HomeListController extends GetxController {
               backgroundColor: Colors.red,
               icon: const Icon(Icons.cancel_outlined),
             )), (right) {
-      Get.showSnackbar(const GetSnackBar(
-        duration: Duration(seconds: 1),
-        backgroundColor: Colors.green,
-        message: 'Succssfully listed',
-        icon: Icon(Icons.check_circle_sharp),
-      ));
-
       if (skip == 0) {
         mainData.clear();
       }
@@ -57,11 +48,11 @@ class HomeListController extends GetxController {
       // mainData.addAll(right.data.list);
       final dataList = jsonEncode(mainData);
 
-      log('------$mainData--------');
+      print('------$mainData--------');
 
       // print('$dataList');
 
-      if (dataList.isEmpty && skip != 0) {
+      if (mainData.isEmpty && skip != 0) {
         const GetSnackBar(
           message: 'full  documents loaded',
         );
@@ -70,12 +61,32 @@ class HomeListController extends GetxController {
       log('-----------------------b1');
       mainData; //contain list of data.
     });
+    mainData.refresh();
+    update();
+  }
+
+  var dataList = [].obs;
+
+  // Future<void> removeData(String id) async {
+  //   final dio = Dio();
+  //   final response =
+  //       await dio.delete('https://ajcjewel.com:5000/api/branch$id');
+  //   if (response.statusCode == 200) {
+  //     dataList.removeWhere((item) => item['id'] == id);
+  //   }
+  // }
+
+  void removeSpecies(int id) {
+    mainData.removeWhere((species) => species.id == id);
   }
 
   //function for pull and refrsh data from api.
 
   Future<void> refreshData() async {
+    isMainApiPaginationLoading(true);
+    mainData.clear();
     await registerList(0);
+    // isMainApiPaginationLoading(true);
   }
 
   onSearchText() {

@@ -3,7 +3,6 @@ import 'package:lottie/lottie.dart';
 
 import '../../../Utils/constains/constains.dart';
 
-
 class LottieSection extends StatelessWidget {
   const LottieSection({super.key, required this.hieght});
   final double hieght;

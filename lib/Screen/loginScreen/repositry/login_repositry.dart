@@ -30,9 +30,8 @@ class LoginRepositry {
             HttpHeaders.contentTypeHeader: "application/json",
           }),
           data: modle
-         // {"mobile": "9961005004" , "password": "123456"}
+          // {"mobile": "9961005004" , "password": "123456"}
           );
-
 
       return Right(LoginResponseModel.fromJson(reponse.data));
     } on DioError catch (dioError) {

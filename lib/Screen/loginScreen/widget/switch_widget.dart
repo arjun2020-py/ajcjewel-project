@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-
 class SwitchWidget extends StatelessWidget {
   const SwitchWidget({
     super.key,
@@ -9,7 +8,7 @@ class SwitchWidget extends StatelessWidget {
     required this.isDark,
   });
 
-  final  themController;
+  final themController;
   final bool isDark;
 
   @override
@@ -19,8 +18,7 @@ class SwitchWidget extends StatelessWidget {
       child: Switch(
         value: themController.isSwitched.value,
         onChanged: (value) {
-          Get.changeThemeMode(
-              isDark ? ThemeMode.light : ThemeMode.dark);
+          Get.changeThemeMode(isDark ? ThemeMode.light : ThemeMode.dark);
 
           themController.changeThemeState(value);
         },

@@ -1,38 +1,38 @@
-
 class RegisterResponse {
-    RegisterResponse({
-        required this.id,
-        required this.name,
-        required this.uid,
-        required this.email,
-        required this.mobile,
-        required this.tectCode,
-        this.globalGalleryId,
-        required this.dataGuard,
-        this.createdUserId,
-        required this.createdAt,
-        this.updatedUserId,
-        required this.updatedAt,
-        required this.status,
-        required this.v,
-    });
+  RegisterResponse({
+    required this.id,
+    required this.name,
+    required this.uid,
+    required this.email,
+    required this.mobile,
+    required this.tectCode,
+    this.globalGalleryId,
+    required this.dataGuard,
+    this.createdUserId,
+    required this.createdAt,
+    this.updatedUserId,
+    required this.updatedAt,
+    required this.status,
+    required this.v,
+  });
 
-    String id;
-    String name;
-    String uid;
-    String email;
-    String mobile;
-    String tectCode;
-    dynamic globalGalleryId;
-    List<int> dataGuard;
-    dynamic createdUserId;
-    int createdAt;
-    dynamic updatedUserId;
-    int updatedAt;
-    int status;
-    int v;
+  String id;
+  String name;
+  String uid;
+  String email;
+  String mobile;
+  String tectCode;
+  dynamic globalGalleryId;
+  List<int> dataGuard;
+  dynamic createdUserId;
+  int createdAt;
+  dynamic updatedUserId;
+  int updatedAt;
+  int status;
+  int v;
 
-    factory RegisterResponse.fromJson(Map<String, dynamic> json) => RegisterResponse(
+  factory RegisterResponse.fromJson(Map<String, dynamic> json) =>
+      RegisterResponse(
         id: json["_id"],
         name: json["_name"],
         uid: json["_uid"],
@@ -47,9 +47,9 @@ class RegisterResponse {
         updatedAt: json["_updatedAt"],
         status: json["_status"],
         v: json["__v"],
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "_id": id,
         "_name": name,
         "_uid": uid,
@@ -64,5 +64,5 @@ class RegisterResponse {
         "_updatedAt": updatedAt,
         "_status": status,
         "__v": v,
-    };
+      };
 }

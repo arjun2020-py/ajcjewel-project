@@ -29,8 +29,7 @@ class GetThemeController extends GetxController {
     //5: update the current value.
     isSwitched.value = value;
     switchStoageState.write('getxIsSwitched', isSwitched);
-    
+
     update();
   }
-  
 }

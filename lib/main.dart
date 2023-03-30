@@ -3,18 +3,18 @@ import 'package:first_app/Screen/themes/constaines/theme_constaines.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:hive/hive.dart';
 
 import 'Screen/splashScreen/controller/lottie_splash_controller.dart';
 import 'Screen/splashScreen/view/splash_view.dart';
 
 // const save_key =
- 
-    // "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfdXNlcklkXyI6IjYzMDI2ZjIxNWE5ZDVjNDY1NzQ3MTMxYSIsIl9lbXBsb3llZUlkXyI6IjYzMDI2ZjIxYTI1MTZhMTU0YTUxY2YxOSIsIl91c2VyUm9sZV8iOiJzdXBlcl9hZG1pbiIsImlhdCI6MTY3OTAyNzM1MiwiZXhwIjoxNzEwNTYzMzUyfQ.HrgcV4hruVO48DcWjAOvdN9hI1z_vzTmXb5aP1cDx8s";
+
+// "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfdXNlcklkXyI6IjYzMDI2ZjIxNWE5ZDVjNDY1NzQ3MTMxYSIsIl9lbXBsb3llZUlkXyI6IjYzMDI2ZjIxYTI1MTZhMTU0YTUxY2YxOSIsIl91c2VyUm9sZV8iOiJzdXBlcl9hZG1pbiIsImlhdCI6MTY3OTAyNzM1MiwiZXhwIjoxNzEwNTYzMzUyfQ.HrgcV4hruVO48DcWjAOvdN9hI1z_vzTmXb5aP1cDx8s";
 
 final authController = Get.put(LoginController());
 
 final key = authController.loginResponseModel?.token;
-
 
 void main() async {
   await GetStorage.init();

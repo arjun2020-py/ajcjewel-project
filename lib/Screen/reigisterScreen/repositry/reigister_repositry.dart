@@ -7,7 +7,6 @@ import 'package:first_app/Utils/expection/expection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 
-import '../../../Utils/constains/constains.dart';
 import '../model/register_reponsce_model.dart';
 
 class ReigsterRepositry {
@@ -16,9 +15,10 @@ class ReigsterRepositry {
       RegisterAuthModel model) async {
     try {
       if (!kIsWeb) {
-        bool isInternetConnection = InternetConnectionChecker().hasListeners;
+        bool isInternetChecker =
+            await InternetConnectionChecker().hasConnection;
 
-        if (!isInternetConnection) {
+        if (!isInternetChecker) {
           return const Left('No Internet Connection');
         }
       }

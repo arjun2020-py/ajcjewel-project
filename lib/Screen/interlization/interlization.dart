@@ -1,4 +1,4 @@
- import 'package:get/route_manager.dart';
+import 'package:get/route_manager.dart';
 
 class Messages extends Translations {
   @override
@@ -8,7 +8,9 @@ class Messages extends Translations {
           'Login': 'Login',
           'Mobile': 'Mobile',
           'Passwrod': 'Passwrod',
-          'Please login here': 'Please Login Here'
+          'please_login_here': 'Please Login Here',
+          'pagination': 'Pagination',
+          ' full_document_loaded': 'Full Document Loaded'
         },
         'hi': {
           'Login': 'लॉग इन करें',

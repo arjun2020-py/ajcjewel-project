@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../controller/drop_down_controller.dart';
 
-
-
 class DropdwonWidget extends StatelessWidget {
   const DropdwonWidget({
     super.key,
@@ -22,8 +20,8 @@ class DropdwonWidget extends StatelessWidget {
         dropdownColor: const Color(0xff62CDFF),
         //isExpanded: true,
         icon: const Icon(Icons.arrow_drop_down_sharp),
-        items: dropdownController.list.value
-            .map<DropdownMenuItem>((String value) {
+        items:
+            dropdownController.list.value.map<DropdownMenuItem>((String value) {
           return DropdownMenuItem(
             value: value,
             child: Center(child: Text(value)),
