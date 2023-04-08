@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../model/create/register_response_list.dart';
+import '../model/register_response_list.dart';
 
 class UserListTile extends StatelessWidget {
   const UserListTile({

@@ -14,7 +14,7 @@ class DropdwonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 300, bottom: 50),
-      child: DropdownButton(
+      child: DropdownButton<dynamic>(
         borderRadius: BorderRadius.circular(10),
         focusColor: Colors.blue,
         dropdownColor: const Color(0xff62CDFF),

@@ -11,8 +11,8 @@ import '../model/register_reponsce_model.dart';
 
 class ReigsterRepositry {
   var dio = Dio();
-  Future<Either<String, RegisterResponceModel>> Register(
-      RegisterAuthModel model) async {
+  Future<Either<String, RegisterResponceModel>> RegisterList(
+      {required RegisterAuthModel payload}) async {
     try {
       if (!kIsWeb) {
         bool isInternetChecker =
@@ -27,7 +27,9 @@ class ReigsterRepositry {
               options: Options(headers: {
                 HttpHeaders.contentTypeHeader: "application/json",
               }),
-              data: model);
+              data: payload);
+
+      print('-----------------${response.data}-------------------------');
 
       return Right(RegisterResponceModel.fromJson(response.data));
     } on DioError catch (dioError) {

@@ -58,7 +58,7 @@ class LoginController extends GetxController {
       // _shrepref.setBool(key.toString(), true);
       final v = _shrepref.setString('loginToken', key.toString());
 
-      Get.to(HomeScreen());
+      Get.off(HomeScreen());
     });
   }
 }

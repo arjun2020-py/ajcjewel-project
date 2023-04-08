@@ -19,7 +19,7 @@ class UpdateAuthModel {
     this.textCode,
     this.dataGuard,
   });
-  UpdateAuthModel.create({
+  UpdateAuthModel.update({
     required this.branchId,
     required this.name,
     required this.email,

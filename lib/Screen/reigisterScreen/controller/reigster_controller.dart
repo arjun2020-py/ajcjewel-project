@@ -1,31 +1,51 @@
-import 'package:either_dart/either.dart';
-import 'package:first_app/Screen/homeScreen/home_scrren.dart';
-import 'package:first_app/Screen/reigisterScreen/model/register_reponsce_model.dart';
-import 'package:first_app/Screen/reigisterScreen/model/reigister_auth_model.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'dart:developer';
+import 'dart:io';
 
+import 'package:dio/dio.dart' as dio;
+import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+
+import 'package:either_dart/either.dart';
+import 'package:first_app/Screen/reigisterScreen/controller/update_reg_controller.dart';
+import 'package:flutter/material.dart';
+
+import '../../homeScreen/view/screen_home.dart';
+import '../model/register_reponsce_model.dart';
 import '../repositry/reigister_repositry.dart';
 
-class RegisterController extends GetxController {
-  TextEditingController nameController = TextEditingController(),
-      emailController = TextEditingController(),
-      mobileController = TextEditingController(),
-      textcodeController = TextEditingController();
+class ReigsterController extends GetxController {
+  final updateController = Get.put(UpdateController());
   RxBool isLoading = false.obs;
+  Rx<File?> imageFile = Rx<File?>(null);
+  var formData;
 
-  RegisterResponceModel? registerResponsceModel;
-
-  void Register(
-      String name, String email, String mobno, String textCode) async {
+  Future<void> RegisterList() async {
+    log('---------------------------n1');
     isLoading.value = true;
-    Either<String, RegisterResponceModel> result = await ReigsterRepositry()
-        .Register(RegisterAuthModel(
-            name: name,
-            email: email,
-            mobile: mobno,
-            textCode: textCode,
-            dataGuard: []));
+
+    // var data = RegisterAuthModel.create(
+    //     name: updateController.nameController.value.text,
+    //     email: updateController.emailController.value.text,
+    //     mobile: updateController.mobileController.value.text,
+    //     textCode: updateController.textcodeController.value.text,
+    //     dataGuard: []);
+
+    formData = dio.FormData.fromMap({
+      "name": updateController.nameController.value.text,
+      "email": updateController.emailController.value.text,
+      "mobile": updateController.mobileController.value.text,
+      "textcode": updateController.textcodeController.value.text,
+      "dataGuard": [],
+    });
+    formData['image'] = await dio.MultipartFile.fromFile(
+      imageFile.value!.path.toString(),
+      filename: imageFile.value?.path.split("/").last,
+    );
+
+    log(formData['image']);
+    log('======================${formData['image']}================');
+    final Either<String, RegisterResponceModel> result =
+        await ReigsterRepositry().RegisterList(payload: formData);
 
     isLoading.value = false;
 
@@ -43,40 +63,29 @@ class RegisterController extends GetxController {
         backgroundColor: Colors.green,
         icon: Icon(Icons.check_outlined),
       ));
-      Get.to(HomeScreen());
+      Get.off(HomeScreen());
     });
   }
 
-  // Future<void> updateDataList(String uId) async {
-  //   isUpdate.value = true;
-  //   var data = UpdateAuthModel.create(
-  //       branchId: uId,
-  //       name: nameController.text,
-  //       email: emailController.text,
-  //       mobile: mobileController.text,
-  //       textCode: textcodeController.text,
-  //       dataGuard: []);
+  Future<void> getPicCamera() async {
+    final imagePicker = ImagePicker();
+    final pickimage = await imagePicker.pickImage(source: ImageSource.camera);
 
-  //   final Either<String, UpdateUserResponseModel> result =
-  //       await UpdateRepo().updateDataList(payload: data);
+    if (pickimage != null) {
+      final file = File(pickimage.path);
+      imageFile.value = file;
+    }
+    Get.back();
+  }
 
-  //   isUpdate.value = false;
+  Future<void> getPicGallary() async {
+    final imagePicker = ImagePicker();
+    final pickimage = await imagePicker.pickImage(source: ImageSource.gallery);
 
-  //   result.fold(
-  //       (left) => Get.showSnackbar(GetSnackBar(
-  //             message: left,
-  //             isDismissible: true,
-  //             duration: const Duration(seconds: 2),
-  //             backgroundColor: Colors.red,
-  //             icon: const Icon(Icons.cancel_outlined),
-  //           )), (right) {
-  //     Get.showSnackbar(const GetSnackBar(
-  //       message: 'succssfully updated',
-  //       duration: Duration(seconds: 2),
-  //       backgroundColor: Colors.green,
-  //       icon: Icon(Icons.check_circle_outline),
-  //     ));
-  //     Get.to(HomeScreen());
-  //   });
-  // }
+    if (pickimage != null && imageFile.value != null) {
+      final file = File(pickimage.path);
+      imageFile.value = file;
+    }
+    Get.back();
+  }
 }

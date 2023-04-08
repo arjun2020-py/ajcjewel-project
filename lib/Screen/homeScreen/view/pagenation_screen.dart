@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../../Utils/helper/heleper.dart';
-import '../controller/create/home_list_controller.dart';
+import '../controller/home_list_controller.dart';
 
 class PagenationScreen extends StatefulWidget {
   const PagenationScreen({super.key});

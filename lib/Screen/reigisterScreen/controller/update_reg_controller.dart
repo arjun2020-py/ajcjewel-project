@@ -1,60 +1,81 @@
-import 'dart:convert';
 import 'dart:developer';
-
+import 'dart:io';
+import 'package:dio/dio.dart' as dio;
 import 'package:either_dart/either.dart';
-import 'package:first_app/Screen/homeScreen/home_scrren.dart';
-import 'package:first_app/Screen/reigisterScreen/controller/reigster_controller.dart';
 import 'package:first_app/Screen/reigisterScreen/model/update_auth_model/update_auth_model.dart';
 import 'package:first_app/Screen/reigisterScreen/model/update_responce_model/update_responce_model.dart';
 import 'package:first_app/Screen/reigisterScreen/model/update_user_response_model/update_user_response_model.dart';
 import 'package:first_app/Screen/reigisterScreen/repositry/reigister_update_repo.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
+import '../../homeScreen/view/screen_home.dart';
 import '../model/update_responce_model/list_element.dart';
 
 class UpdateController extends GetxController {
   RxBool isUpdating = false.obs;
-  RxBool isLoading = false.obs;
   RxBool isUpdate = false.obs;
 
+  final nameController = TextEditingController().obs;
+  final emailController = TextEditingController().obs;
+  final mobileController = TextEditingController().obs;
+  final textcodeController = TextEditingController().obs;
+  RxBool isLoading = false.obs;
+  var formData;
+
+  //for image pick.
+
+//* The imageFile variable is wrapped in a Rx object, which allows it to be updated and observed in the UI.
+  Rx<File?> imageFile = Rx<File?>(null);
+  // var imageFile;
+
   RxList<ListElement> updateData = <ListElement>[].obs;
-  String? barnchId;
-  final controllr = Get.put(RegisterController());
+
+  TextcontrollerClear() {
+    nameController.value.clear();
+    emailController.value.clear();
+    mobileController.value.clear();
+    textcodeController.value.clear();
+  }
 
   Future<void> updateList(String id) async {
     isUpdating.value = true;
-    log('-------------a1');
 
     Either<String, UpdateResponceModel> result =
         await UpdateRepo().updateList(id);
 
     isUpdating.value = false;
-    log('-------------a2');
+
     result.fold(
         (left) => Get.showSnackbar(GetSnackBar(
-              duration: const Duration(seconds: 3),
-              message: left,
-              backgroundColor: Colors.red,
-              icon: const Icon(Icons.cancel_outlined),
+            duration: const Duration(seconds: 3),
+            message: left,
+            backgroundColor: Colors.red
+            //  icon: const Icon(Icons.cancel_outlined),
             )), (right) {
-      log('-------------a3');
+      Get.showSnackbar(
+        const GetSnackBar(
+          duration: Duration(seconds: 3),
+          message: 'welcome to registation deatils..',
+          backgroundColor: Colors.green,
+          icon: Icon(Icons.cancel_outlined),
+        ),
+      );
 
       updateData.addAll(right.data!.listElement!);
 
-      log('-------------a');
-      // mainData.addAll(right.data.list);
-      final dataList = jsonEncode(updateData);
-      log('-1-1-1${dataList}1-1--1');
+      nameController.value.text = right.data!.listElement![0].name.toString();
+      emailController.value.text = right.data!.listElement![0].email.toString();
+      mobileController.value.text =
+          right.data!.listElement![0].mobile.toString();
+      textcodeController.value.text =
+          right.data!.listElement![0].tectCode.toString();
 
-      controllr.nameController.text = updateData[0].name.toString();
-      controllr.emailController.text = updateData[0].email.toString();
-      controllr.mobileController.text = updateData[0].mobile.toString();
-      controllr.textcodeController.text = updateData[0].tectCode.toString();
-
-      log('------${dataList}--------');
+      log(right.data!.listElement![0].name.toString());
+      log(right.data!.listElement![0].email.toString());
+      log(right.data!.listElement![0].mobile.toString());
     });
   }
 
@@ -62,16 +83,52 @@ class UpdateController extends GetxController {
 
   Future<void> updateDataList(String uId) async {
     isUpdate.value = true;
-    var data = UpdateAuthModel.create(
-        branchId: uId,
-        name: controllr.nameController.text,
-        email: controllr.emailController.text,
-        mobile: controllr.mobileController.text,
-        textCode: controllr.textcodeController.text,
-        dataGuard: []);
+
+    // var data = UpdateAuthModel.update(
+    //     branchId: uId,
+    //     name: nameController.value.text,
+    //     email: emailController.value.text,
+    //     mobile: mobileController.value.text,
+    //     textCode: textcodeController.value.text,
+    //     dataGuard: []);
+
+    //upload data as form data
+
+    formData = dio.FormData.fromMap({
+      "branchId": uId,
+      "name": nameController.value.text,
+      "email": emailController.value.text,
+      "mobile": mobileController.value.text,
+      "textcode": textcodeController.value.text,
+      "dataGuard": [],
+      "image": await dio.MultipartFile.fromFile(
+        imageFile.value!.path,
+        filename: imageFile.value!.path.split("/").last,
+      )
+    });
+    log('================${imageFile.value!.path}====================');
+    log('--------------------------f1');
+
+    //print(imageFile.value!.path);
+    // formData['image'] = await dio.MultipartFile.fromFile(
+    //   imageFile.value!.path.toString(),
+    //   filename: imageFile.value?.path.split("/").last,
+    // );
+
+    log('---------------------------f2');
+
+    final fields = formData.fields.asMap();
+    final updateModel = UpdateAuthModel(
+      branchId: fields[0]?.value,
+      name: fields[1]?.value,
+      email: fields[2]?.value,
+      mobile: fields[3]?.value,
+      textCode: fields[4]?.value,
+      dataGuard: [],
+    );
 
     final Either<String, UpdateUserResponseModel> result =
-        await UpdateRepo().updateDataList(payload: data);
+        await UpdateRepo().updateDataList(payload: updateModel);
 
     isUpdate.value = false;
 
@@ -84,12 +141,39 @@ class UpdateController extends GetxController {
               icon: const Icon(Icons.cancel_outlined),
             )), (right) {
       Get.showSnackbar(const GetSnackBar(
-        message: 'succssfully updated',
+        message: 'successfully updated',
         duration: Duration(seconds: 2),
         backgroundColor: Colors.green,
         icon: Icon(Icons.check_circle_outline),
       ));
-      Get.to(HomeScreen());
+
+      Get.off(HomeScreen());
     });
+  }
+
+  //get image from mobile:
+
+  Future<void> getPicCamera() async {
+    final imagePicker1 = ImagePicker();
+    final pickimage1 = await imagePicker1.pickImage(source: ImageSource.camera);
+
+    if (pickimage1 != null) {
+      final file = File(pickimage1.path);
+      imageFile.value = file;
+    }
+    Get.back();
+  }
+
+  Future<void> getPicGallary() async {
+    final imagePicker2 = ImagePicker();
+    final XFile? pickimage2 =
+        await imagePicker2.pickImage(source: ImageSource.gallery);
+
+    if (pickimage2 != null) {
+      final file = File(pickimage2.path);
+      imageFile.value = file;
+    }
+    log('------------${imageFile.value}---------');
+    Get.back();
   }
 }

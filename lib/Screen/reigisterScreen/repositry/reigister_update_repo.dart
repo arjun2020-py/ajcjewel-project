@@ -1,20 +1,18 @@
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';
 import 'package:first_app/Utils/constains/constains.dart';
 import 'package:first_app/Utils/expection/expection.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../controller/update_reg_controller.dart';
 import '../model/update_auth_model/update_auth_model.dart';
 import '../model/update_responce_model/update_responce_model.dart';
 import '../model/update_user_response_model/update_user_response_model.dart';
+import '../controller/update_reg_controller.dart';
 
 final controller = Get.put(UpdateController());
 
@@ -53,7 +51,6 @@ class UpdateRepo {
         }),
         data: dataList,
       );
-      log('${response}');
       return Right(UpdateResponceModel.fromJson(response.data));
     } on DioError catch (dioError) {
       return Left(DioErrorResponseString.getErrorString(dioError));
@@ -72,13 +69,11 @@ class UpdateRepo {
             await InternetConnectionChecker().hasConnection;
 
         if (!isInternetConnection) {
-          return Left('No internet connection');
+          return const Left('No internet connection');
         }
       }
-      log('------------------------v1');
       final pref = await SharedPreferences.getInstance();
       final keyToken = pref.getString('loginToken');
-      log('------------------------v3');
 
       var response = await dio.put('https://ajcjewel.com:5000/api/branch',
           options: Options(headers: {
@@ -86,9 +81,10 @@ class UpdateRepo {
             'Content-Type': "application/json",
           }),
           data: payload);
-      log('------------------------v2');
 
-      return Right(UpdateUserResponseModel.fromJson(response.data));
+      var res = UpdateUserResponseModel.fromJson(response.data);
+
+      return Right(res);
     } on DioError catch (dioError) {
       return Left(DioErrorResponseString.getErrorString(dioError));
     } catch (e) {

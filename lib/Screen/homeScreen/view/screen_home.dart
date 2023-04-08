@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:first_app/Screen/homeScreen/model/create/register_response_list.dart';
 import 'package:first_app/Screen/homeScreen/view/pagenation_screen.dart';
 import 'package:first_app/Screen/loginScreen/login_screen.dart';
 import 'package:flutter/material.dart';
@@ -9,9 +8,9 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../reigisterScreen/controller/reigster_controller.dart';
+import '../../reigisterScreen/controller/update_reg_controller.dart';
 import '../../reigisterScreen/view/view_page.dart';
-import '../controller/create/home_list_controller.dart';
+import '../controller/home_list_controller.dart';
 import '../widget/user_list_tile.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -23,14 +22,19 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final listController = Get.put(HomeListController());
-  final regController = Get.put(RegisterController());
+  // final regController = Get.put(RegisterController());
+  final updateController = Get.put(UpdateController());
 
   ScrollController scrollController = ScrollController();
   @override
   void initState() {
     super.initState();
-    listController.inalizeList();
-    log('working 99');
+
+    Future.delayed(Duration.zero, () async {
+      listController.refreshData();
+    });
+
+    log('start point ');
     scrollController.addListener(() {
       log('working 9');
       if (scrollController.position.atEdge) {
@@ -68,9 +72,9 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           IconButton(
               onPressed: () {
-                Get.to(PagenationScreen());
+                Get.to(const PagenationScreen());
               },
-              icon: Icon(Icons.pages_rounded)),
+              icon: const Icon(Icons.pages_rounded)),
           IconButton(
               onPressed: () async {
                 SharedPreferences prfs = await SharedPreferences.getInstance();
@@ -83,6 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          updateController.TextcontrollerClear();
           Get.to(ViewPageScreen(
             barnchId: '',
           ));
@@ -115,38 +120,37 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Obx(
               () => Stack(
                 children: [
-                  ListView.builder(
-                      controller: scrollController,
-                      itemCount: listController.mainData.length,
-                      // itemCount: 10,
-                      shrinkWrap: true,
-                      itemBuilder: (BuildContext context, int index) {
-                        final data = listController.mainData[index];
+                  listController.isLoading.value == true
+                      ? LottieBuilder.network(
+                          'https://assets1.lottiefiles.com/private_files/lf30_fn9xcfqg.json')
+                      : ListView.builder(
+                          controller: scrollController,
+                          itemCount: listController.mainData.length,
+                          // itemCount: 10,
+                          shrinkWrap: true,
+                          itemBuilder: (BuildContext context, int index) {
+                            final data = listController.mainData[index];
 
-                        // return Text('data2');
-                        return Slidable(
-                            endActionPane:
-                                ActionPane(motion: BehindMotion(), children: [
-                              SlidableAction(
-                                backgroundColor: Colors.green,
-                                icon: Icons.update,
-                                label: 'Update',
-                                onPressed: (context) {
-                                  Get.to(ViewPageScreen(
-                                    barnchId: data.id,
-                                  ));
-                                },
-                              ),
-                              // SlidableAction(
-                              //   backgroundColor: Colors.red,
-                              //   icon: Icons.delete,
-                              //   onPressed: (context) async {
-                              //     listController.removeSpecies(data.id.length);
-                              //   },
-                              // )
-                            ]),
-                            child: UserListTile(data: data));
-                      }),
+                            // return Text('data2');
+                            return Slidable(
+                                endActionPane: ActionPane(
+                                    motion: const BehindMotion(),
+                                    children: [
+                                      SlidableAction(
+                                        backgroundColor: Colors.green,
+                                        icon: Icons.update,
+                                        label: 'Update',
+                                        onPressed: (context) {
+                                          Get.to(ViewPageScreen(
+                                            barnchId: data.id,
+                                          ));
+                                          log('updation statred');
+                                          //  log('--${data.id}=====');
+                                        },
+                                      ),
+                                    ]),
+                                child: UserListTile(data: data));
+                          }),
                   if (listController.isMainApiPaginationLoading.value == true)
                     Align(
                         alignment: Alignment.bottomCenter,

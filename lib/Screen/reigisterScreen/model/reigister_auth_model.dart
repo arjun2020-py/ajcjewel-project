@@ -19,6 +19,14 @@ class RegisterAuthModel {
     required this.dataGuard,
   });
 
+  //create a sperate constuctor for
+  RegisterAuthModel.create({
+    required this.name,
+    required this.email,
+    required this.mobile,
+    required this.textCode,
+    required this.dataGuard,
+  });
   String name;
   String email;
   String mobile;

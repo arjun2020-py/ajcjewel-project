@@ -1,6 +1,8 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';
-import 'package:first_app/Screen/homeScreen/model/create/register_response_list.dart';
+import 'package:first_app/Screen/homeScreen/model/register_response_list.dart';
 import 'package:first_app/Utils/expection/expection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +28,7 @@ class HomeRepositry {
           return const Left('no internet connection is avilabel');
         }
       }
-      print("____s1");
+      log('-------------------c1');
       Map<String, dynamic> dataList = {
         "sortType": 2,
         "sortOrder": 1,
@@ -38,6 +40,8 @@ class HomeRepositry {
         "skip": skip,
         "searchingText": searchTexts
       };
+      log('-------------------c2');
+
       final pref = await SharedPreferences.getInstance();
       final keyToken = pref.getString('loginToken');
 
@@ -47,6 +51,7 @@ class HomeRepositry {
             'Content-Type': "application/json",
           }),
           data: dataList);
+      log('-------------------c4');
 
       final mainApiList = RegsiterResponseListModel.fromJson(response.data);
       if (mainApiList.data.list.isEmpty && skip != 0) {
@@ -59,6 +64,7 @@ class HomeRepositry {
             textColor: Colors.white,
             fontSize: 16.0);
       }
+      log('-------------------c5');
 
       return Right(RegsiterResponseListModel.fromJson(response.data));
     } on DioError catch (dioError) {
