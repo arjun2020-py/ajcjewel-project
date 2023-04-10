@@ -81,7 +81,7 @@ class ReigsterController extends GetxController {
         await imagePicker2.pickImage(source: ImageSource.gallery);
 
     if (pickimage2 != null) {
-      log('pick------------${pickimage2}---------');
+      //log('pick------------${pickimage2}---------');
       final file = File(pickimage2.path);
       imageFile.value = file;
     }

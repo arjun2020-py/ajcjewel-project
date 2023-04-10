@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../Utils/helper/heleper.dart';
-import 'controller/reigster_controller.dart';
-import 'controller/update_reg_controller.dart';
+import '../../../Utils/helper/heleper.dart';
+import '../controller/reigster_controller.dart';
+import '../controller/update_reg_controller.dart';
 
 var updateController = Get.put(UpdateController());
 var registerController = Get.put(ReigsterController());
-Future<dynamic> OptionSheet(
-  BuildContext context,
-) {
+Future<dynamic> OptionSheet(BuildContext context, var barnchId) {
   return showModalBottomSheet(
     backgroundColor: Colors.transparent,
     isScrollControlled: true,
@@ -34,8 +32,9 @@ Future<dynamic> OptionSheet(
                     child: ClipOval(
                       child: IconButton(
                           onPressed: () {
-                            registerController.getPicCamera();
-                            updateController.getPicCamera();
+                            barnchId == ""
+                                ? registerController.getPicCamera()
+                                : updateController.getPicCamera();
                           },
                           icon: const Icon(Icons.camera_alt_outlined,
                               color: Colors.white)),
@@ -55,8 +54,9 @@ Future<dynamic> OptionSheet(
                     child: ClipOval(
                       child: IconButton(
                           onPressed: () {
-                            updateController.getPicGallary();
-                            registerController.getPicGallary();
+                            barnchId == ""
+                                ? registerController.getPicGallary()
+                                : updateController.getPicGallary();
                           },
                           icon: const Icon(
                             Icons.photo_album_outlined,

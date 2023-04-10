@@ -30,7 +30,7 @@ class ReigsterRepositry {
             HttpHeaders.contentTypeHeader: "application/json",
           }),
           data: payload);
-      print('-------update${jsonEncode(response.data)}');
+      print('-------register${jsonEncode(response.data)}');
 
       return Right(RegisterResponceModel.fromJson(response.data));
     } on DioError catch (dioError) {
