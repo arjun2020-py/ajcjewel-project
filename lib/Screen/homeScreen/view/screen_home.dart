@@ -28,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
   ScrollController scrollController = ScrollController();
   @override
   void initState() {
+    log('---------------------------------p1');
     super.initState();
 
     Future.delayed(Duration.zero, () async {
@@ -49,7 +50,8 @@ class _HomeScreenState extends State<HomeScreen> {
           if (listController.isMainApiPaginationLoading.value == false) {
             log('working');
             listController.isMainApiPaginationLoading(true);
-            listController.registerList(listController.mainData.length);
+            listController.registerList(listController
+                .mainData.length); // convert list length to integer
           }
         }
       }
@@ -120,37 +122,33 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Obx(
               () => Stack(
                 children: [
-                  listController.isLoading.value == true
-                      ? LottieBuilder.network(
-                          'https://assets1.lottiefiles.com/private_files/lf30_fn9xcfqg.json')
-                      : ListView.builder(
-                          controller: scrollController,
-                          itemCount: listController.mainData.length,
-                          // itemCount: 10,
-                          shrinkWrap: true,
-                          itemBuilder: (BuildContext context, int index) {
-                            final data = listController.mainData[index];
+                  ListView.builder(
+                      controller: scrollController,
+                      itemCount: listController.mainData.length,
+                      // itemCount: 10,
+                      shrinkWrap: true,
+                      itemBuilder: (BuildContext context, int index) {
+                        final data = listController.mainData[index];
 
-                            // return Text('data2');
-                            return Slidable(
-                                endActionPane: ActionPane(
-                                    motion: const BehindMotion(),
-                                    children: [
-                                      SlidableAction(
-                                        backgroundColor: Colors.green,
-                                        icon: Icons.update,
-                                        label: 'Update',
-                                        onPressed: (context) {
-                                          Get.to(ViewPageScreen(
-                                            barnchId: data.id,
-                                          ));
-                                          log('updation statred');
-                                          //  log('--${data.id}=====');
-                                        },
-                                      ),
-                                    ]),
-                                child: UserListTile(data: data));
-                          }),
+                        return Slidable(
+                            endActionPane: ActionPane(
+                                motion: const BehindMotion(),
+                                children: [
+                                  SlidableAction(
+                                    backgroundColor: Colors.green,
+                                    icon: Icons.update,
+                                    label: 'Update',
+                                    onPressed: (context) {
+                                      Get.to(ViewPageScreen(
+                                        barnchId: data.id,
+                                      ));
+                                      log('updation statred');
+                                      //  log('--${data.id}=====');
+                                    },
+                                  ),
+                                ]),
+                            child: UserListTile(data: data));
+                      }),
                   if (listController.isMainApiPaginationLoading.value == true)
                     Align(
                         alignment: Alignment.bottomCenter,

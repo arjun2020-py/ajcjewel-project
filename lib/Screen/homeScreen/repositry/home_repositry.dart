@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';
 import 'package:first_app/Screen/homeScreen/model/register_response_list.dart';
@@ -18,7 +17,7 @@ class HomeRepositry {
 
   // final data = [].obs;
   Future<Either<String, RegsiterResponseListModel>> RegisterList(
-      String searchTexts, int skip) async {
+      String searchTexts, var skip) async {
     try {
       if (!kIsWeb) {
         bool isInternetConnection =
@@ -28,6 +27,7 @@ class HomeRepositry {
           return const Left('no internet connection is avilabel');
         }
       }
+
       log('-------------------c1');
       Map<String, dynamic> dataList = {
         "sortType": 2,
@@ -36,7 +36,7 @@ class HomeRepositry {
         "screenType": [],
         "responseFormat": [],
         "branchIds": [],
-        "limit": 10,
+        "limit": 20,
         "skip": skip,
         "searchingText": searchTexts
       };
@@ -52,8 +52,15 @@ class HomeRepositry {
           }),
           data: dataList);
       log('-------------------c4');
+      log('-------------------c8');
+
+      // print('pa${jsonEncode(response.data)}');
+      log('-------------------c4');
 
       final mainApiList = RegsiterResponseListModel.fromJson(response.data);
+
+      log('-------------------c10');
+
       if (mainApiList.data.list.isEmpty && skip != 0) {
         Fluttertoast.showToast(
             msg: 'full_document_loaded'.tr,
@@ -68,6 +75,7 @@ class HomeRepositry {
 
       return Right(RegsiterResponseListModel.fromJson(response.data));
     } on DioError catch (dioError) {
+      log('-------------------------c6');
       return Left(DioErrorResponseString.getErrorString(dioError));
     } catch (e) {
       return Left(e.toString());

@@ -2,7 +2,6 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:dio/dio.dart' as dio;
 import 'package:either_dart/either.dart';
-import 'package:first_app/Screen/reigisterScreen/model/update_auth_model/update_auth_model.dart';
 import 'package:first_app/Screen/reigisterScreen/model/update_responce_model/update_responce_model.dart';
 import 'package:first_app/Screen/reigisterScreen/model/update_user_response_model/update_user_response_model.dart';
 import 'package:first_app/Screen/reigisterScreen/repositry/reigister_update_repo.dart';
@@ -65,7 +64,7 @@ class UpdateController extends GetxController {
       );
 
       updateData.addAll(right.data!.listElement!);
-
+      TextcontrollerClear();
       nameController.value.text = right.data!.listElement![0].name.toString();
       emailController.value.text = right.data!.listElement![0].email.toString();
       mobileController.value.text =
@@ -83,14 +82,7 @@ class UpdateController extends GetxController {
 
   Future<void> updateDataList(String uId) async {
     isUpdate.value = true;
-
-    // var data = UpdateAuthModel.update(
-    //     branchId: uId,
-    //     name: nameController.value.text,
-    //     email: emailController.value.text,
-    //     mobile: mobileController.value.text,
-    //     textCode: textcodeController.value.text,
-    //     dataGuard: []);
+    isLoading.value = true;
 
     //upload data as form data
 
@@ -99,39 +91,31 @@ class UpdateController extends GetxController {
       "name": nameController.value.text,
       "email": emailController.value.text,
       "mobile": mobileController.value.text,
-      "textcode": textcodeController.value.text,
-      "dataGuard": [],
+      "textCode": textcodeController.value.text,
+      "dataGuard": "[]",
       "image": await dio.MultipartFile.fromFile(
         imageFile.value!.path,
         filename: imageFile.value!.path.split("/").last,
       )
     });
-    log('================${imageFile.value!.path}====================');
-    log('--------------------------f1');
+    log('update==============${imageFile.value!.path}==================');
+    log('${imageFile.value!.path.split("/").last}');
 
-    //print(imageFile.value!.path);
-    // formData['image'] = await dio.MultipartFile.fromFile(
-    //   imageFile.value!.path.toString(),
-    //   filename: imageFile.value?.path.split("/").last,
+    // final fields = formData.fields.asMap();
+    // final updateModel = UpdateAuthModel(
+    //   branchId: fields[0]?.value,
+    //   name: fields[1]?.value,
+    //   email: fields[2]?.value,
+    //   mobile: fields[3]?.value,
+    //   textCode: fields[4]?.value,
+    //   dataGuard: [],
     // );
 
-    log('---------------------------f2');
-
-    final fields = formData.fields.asMap();
-    final updateModel = UpdateAuthModel(
-      branchId: fields[0]?.value,
-      name: fields[1]?.value,
-      email: fields[2]?.value,
-      mobile: fields[3]?.value,
-      textCode: fields[4]?.value,
-      dataGuard: [],
-    );
-
     final Either<String, UpdateUserResponseModel> result =
-        await UpdateRepo().updateDataList(payload: updateModel);
+        await UpdateRepo().updateDataList(payload: formData);
 
     isUpdate.value = false;
-
+    isLoading.value = false;
     result.fold(
         (left) => Get.showSnackbar(GetSnackBar(
               message: left,
@@ -173,7 +157,7 @@ class UpdateController extends GetxController {
       final file = File(pickimage2.path);
       imageFile.value = file;
     }
-    log('------------${imageFile.value}---------');
+    // log('------------${imageFile.value}---------');
     Get.back();
   }
 }

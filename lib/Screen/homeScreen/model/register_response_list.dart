@@ -52,7 +52,6 @@ class ListElement {
     required this.mobile,
     required this.tectCode,
     this.globalGalleryId,
-    required this.dataGuard,
     this.createdUserId,
     required this.createdAt,
     this.updatedUserId,
@@ -68,7 +67,6 @@ class ListElement {
   String mobile;
   String tectCode;
   dynamic globalGalleryId;
-  List<int> dataGuard;
   dynamic createdUserId;
   int createdAt;
   dynamic updatedUserId;
@@ -84,7 +82,6 @@ class ListElement {
         mobile: json["_mobile"],
         tectCode: json["_tectCode"],
         globalGalleryId: json["_globalGalleryId"],
-        dataGuard: List<int>.from(json["_dataGuard"].map((x) => x)),
         createdUserId: json["_createdUserId"],
         createdAt: json["_createdAt"],
         updatedUserId: json["_updatedUserId"],
@@ -101,7 +98,6 @@ class ListElement {
         "_mobile": mobile,
         "_tectCode": tectCode,
         "_globalGalleryId": globalGalleryId,
-        "_dataGuard": List<dynamic>.from(dataGuard.map((x) => x)),
         "_createdUserId": createdUserId,
         "_createdAt": createdAt,
         "_updatedUserId": updatedUserId,

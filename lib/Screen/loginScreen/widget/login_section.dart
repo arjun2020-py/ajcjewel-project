@@ -38,6 +38,7 @@ class LoginSection extends StatelessWidget {
             txtSize: 18),
         addVerticalSpacing(10),
         TextfiledWidget(
+            keyboardType: TextInputType.phone,
             vaildator: (value) {
               if (!GetUtils.isPhoneNumber(value.toString())) {
                 return 'Enter correct mobile number';
@@ -50,6 +51,7 @@ class LoginSection extends StatelessWidget {
             icon: const Icon(Icons.phone_rounded)),
         addVerticalSpacing(10),
         TextfiledWidget(
+            keyboardType: TextInputType.visiblePassword,
             vaildator: (value) {
               if (!GetUtils.isLengthGreaterOrEqual(value, 6)) {
                 return 'Enter correct  passwrod';

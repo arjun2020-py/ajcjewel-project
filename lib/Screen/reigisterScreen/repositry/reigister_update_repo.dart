@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
@@ -62,7 +63,7 @@ class UpdateRepo {
 //update opertion repo.
 
   Future<Either<String, UpdateUserResponseModel>> updateDataList(
-      {required UpdateAuthModel payload}) async {
+      {required FormData payload}) async {
     try {
       if (!kIsWeb) {
         bool isInternetConnection =
@@ -84,8 +85,13 @@ class UpdateRepo {
 
       var res = UpdateUserResponseModel.fromJson(response.data);
 
+      print('-------update${jsonEncode(response.data)}');
+
       return Right(res);
     } on DioError catch (dioError) {
+      log('update-----${dioError.message}-----update');
+      log('update-----${dioError.response}-----update');
+
       return Left(DioErrorResponseString.getErrorString(dioError));
     } catch (e) {
       return Left(e.toString());

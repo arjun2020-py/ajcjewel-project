@@ -20,32 +20,28 @@ class ReigsterController extends GetxController {
   var formData;
 
   Future<void> RegisterList() async {
-    log('---------------------------n1');
+    log('---------------------------pick1');
     isLoading.value = true;
-
-    // var data = RegisterAuthModel.create(
-    //     name: updateController.nameController.value.text,
-    //     email: updateController.emailController.value.text,
-    //     mobile: updateController.mobileController.value.text,
-    //     textCode: updateController.textcodeController.value.text,
-    //     dataGuard: []);
 
     formData = dio.FormData.fromMap({
       "name": updateController.nameController.value.text,
       "email": updateController.emailController.value.text,
       "mobile": updateController.mobileController.value.text,
-      "textcode": updateController.textcodeController.value.text,
-      "dataGuard": [],
+      "textCode": updateController.textcodeController.value.text,
+      "dataGuard": "[]",
+      if (imageFile.value != null)
+        "image": await dio.MultipartFile.fromFile(
+          imageFile.value!.path,
+          filename: imageFile.value!.path.split("/").last,
+        )
     });
-    formData['image'] = await dio.MultipartFile.fromFile(
-      imageFile.value!.path.toString(),
-      filename: imageFile.value?.path.split("/").last,
-    );
+    // log('---------------------------pick2');
+    //  log('-----------${imageFile.value!.path}------');
 
-    log(formData['image']);
-    log('======================${formData['image']}================');
     final Either<String, RegisterResponceModel> result =
         await ReigsterRepositry().RegisterList(payload: formData);
+
+    log('---------------------------pick3');
 
     isLoading.value = false;
 
@@ -65,6 +61,7 @@ class ReigsterController extends GetxController {
       ));
       Get.off(HomeScreen());
     });
+    log('---------------------------pick4');
   }
 
   Future<void> getPicCamera() async {
@@ -79,13 +76,16 @@ class ReigsterController extends GetxController {
   }
 
   Future<void> getPicGallary() async {
-    final imagePicker = ImagePicker();
-    final pickimage = await imagePicker.pickImage(source: ImageSource.gallery);
+    final imagePicker2 = ImagePicker();
+    final XFile? pickimage2 =
+        await imagePicker2.pickImage(source: ImageSource.gallery);
 
-    if (pickimage != null && imageFile.value != null) {
-      final file = File(pickimage.path);
+    if (pickimage2 != null) {
+      log('pick------------${pickimage2}---------');
+      final file = File(pickimage2.path);
       imageFile.value = file;
     }
+    log('------------${imageFile.value}---------');
     Get.back();
   }
 }

@@ -101,8 +101,8 @@ class _PagenationScreenState extends State<PagenationScreen> {
                             children: [
                               addHorizontalSpacing(10),
                               Text(userList.email),
-                              addHorizontalSpacing(10),
-                              Text(userList.mobile)
+                              // addHorizontalSpacing(10),
+                              // Text(userList.mobile)
                             ],
                           ),
                         ),

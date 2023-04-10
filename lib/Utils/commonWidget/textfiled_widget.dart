@@ -6,8 +6,9 @@ class TextfiledWidget extends StatelessWidget {
       required this.txt,
       required this.icon,
       required this.controller,
-      required this.vaildator});
-
+      required this.vaildator,
+      required this.keyboardType});
+  TextInputType? keyboardType;
   final String txt;
   final Widget icon;
   final TextEditingController controller;
@@ -19,6 +20,7 @@ class TextfiledWidget extends StatelessWidget {
       child: ConstrainedBox(
         constraints: BoxConstraints(maxWidth: 450),
         child: TextFormField(
+          keyboardType: keyboardType,
           validator: vaildator,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           controller: controller,

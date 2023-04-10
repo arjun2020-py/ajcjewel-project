@@ -9,8 +9,8 @@ import '../repositry/home_repositry.dart';
 import 'package:get/get.dart';
 
 class HomeListController extends GetxController {
-  RxBool isValueChanged = false.obs;
-  RxBool isSerarched = false.obs;
+  // RxBool isValueChanged = false.obs;
+  // RxBool isSerarched = false.obs;
   RxBool isDeleting = false.obs;
   RxBool isLoading = true.obs;
   RxBool hasMore = false.obs;
@@ -18,16 +18,19 @@ class HomeListController extends GetxController {
 
   RxList<ListElement> mainData = <ListElement>[].obs;
 
-  var searchController = TextEditingController();
+  final searchController = TextEditingController();
   Future<void> registerList(var skip) async {
-    isLoading.value = true;
+    // isLoading.value = true;
     isMainApiPaginationLoading.value = true;
+
+    log('-----------------------pg1');
 
     Either<String, RegsiterResponseListModel> result =
         await HomeRepositry().RegisterList(searchController.text, skip);
 
     isMainApiPaginationLoading.value = false;
-    isLoading.value = false;
+    // isLoading.value = false;
+    log('-----------------------pg2');
 
     result.fold(
         (left) => Get.showSnackbar(GetSnackBar(
@@ -40,6 +43,7 @@ class HomeListController extends GetxController {
         mainData.clear();
       }
       mainData.addAll(right.data.list);
+      log('-----------------------pg3');
 
       // mainData.addAll(right.data.list);
       final dataList = jsonEncode(mainData);
@@ -47,14 +51,7 @@ class HomeListController extends GetxController {
       print('aaa------$mainData--------');
 
       // print('$dataList');
-      log('-----------------------r1');
-
-      if (mainData.isEmpty && skip != 0) {
-        const GetSnackBar(
-          message: 'full  documents loaded',
-        );
-      }
-      log('-----------------------r2');
+      log('----------------------p2');
 
       mainData; //contain list of data.
     });

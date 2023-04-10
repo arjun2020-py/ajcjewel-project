@@ -15,7 +15,8 @@ class CredRepo {
 
   // final data = [].obs;
   Future<Either<String, RegsiterResponseListModel>> RegisterList(
-      String searchTexts, int skip) async {
+    String searchTexts,
+  ) async {
     try {
       if (!kIsWeb) {
         bool isInternetConnection =
