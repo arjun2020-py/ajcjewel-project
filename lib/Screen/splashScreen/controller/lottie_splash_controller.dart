@@ -6,7 +6,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../main.dart';
 import '../../homeScreen/view/screen_home.dart';
+import '../../loginScreen/compents/desktop_screen.dart';
+import '../../loginScreen/compents/mobile_screen.dart';
 import '../../loginScreen/view/screen_login.dart';
+import '../../responsiveWidget/reponsive_desgin.dart';
 
 class SplashController extends GetxController {
   @override
@@ -26,7 +29,8 @@ class SplashController extends GetxController {
 
     if (loginToken == null || loginToken == false) {
       // User is logged in, navigate to home screen
-      nextScreen = LoginScreen();
+      nextScreen =
+          ResponsiveLayout(desktop: DesktopScreen(), mobile: MobileScreen());
     } else {
       // User is not logged in, navigate to login screen
       nextScreen = HomeScreen();

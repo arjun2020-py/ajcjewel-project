@@ -6,16 +6,11 @@ import 'package:either_dart/either.dart';
 import 'package:first_app/Utils/constains/constains.dart';
 import 'package:first_app/Utils/expection/expection.dart';
 import 'package:flutter/foundation.dart';
-import 'package:get/instance_manager.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../model/update_auth_model/update_auth_model.dart';
 import '../model/update_responce_model/update_responce_model.dart';
 import '../model/update_user_response_model/update_user_response_model.dart';
-import '../controller/update_reg_controller.dart';
-
-final controller = Get.put(UpdateController());
 
 class UpdateRepo {
   var dio = Dio();

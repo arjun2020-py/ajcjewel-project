@@ -1,40 +1,43 @@
 import 'dart:developer';
 
-import 'package:first_app/Screen/homeScreen/view/pagenation_screen.dart';
 import 'package:first_app/Screen/loginScreen/login_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
-import '../../reigisterScreen/controller/update_reg_controller.dart';
+import '../../ReportScreen/report_screen.dart';
+import '../../dataGridScreen/sfdata_grid_screen.dart';
+import '../../reigisterScreen/controller/reigster_controller.dart';
 import '../../reigisterScreen/view/view_page.dart';
 import '../controller/home_list_controller.dart';
-import '../widget/user_list_tile.dart';
+import '../widget/show_alert_dialog.dart';
+import 'auto_complte.dart';
+import 'data_table_paginatiion.dart';
 
 class HomeScreen extends StatefulWidget {
-  HomeScreen({super.key});
-
+  HomeScreen({
+    super.key,
+  });
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
   final listController = Get.put(HomeListController());
-  // final regController = Get.put(RegisterController());
-  final updateController = Get.put(UpdateController());
+  final regController = Get.put(ReigsterController());
+  // final updateController = Get.put(UpdateController());
 
+  var brId;
   ScrollController scrollController = ScrollController();
   @override
   void initState() {
     log('---------------------------------p1');
     super.initState();
-
     Future.delayed(Duration.zero, () async {
       listController.refreshData();
     });
-
     log('start point ');
     scrollController.addListener(() {
       log('working 9');
@@ -74,9 +77,19 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           IconButton(
               onPressed: () {
-                Get.to(const PagenationScreen());
+                //Get.to(UserTable());
               },
-              icon: const Icon(Icons.pages_rounded)),
+              icon: Icon(Icons.tab_rounded)),
+          IconButton(
+              onPressed: () {
+                Get.to(DataGridScreen());
+              },
+              icon: Icon(Icons.pages_rounded)),
+          IconButton(
+              onPressed: () {
+                Get.to(AutoComplteScreen());
+              },
+              icon: Icon(Icons.auto_awesome_mosaic)),
           IconButton(
               onPressed: () async {
                 SharedPreferences prfs = await SharedPreferences.getInstance();
@@ -89,7 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          updateController.TextcontrollerClear();
+          regController.TextcontrollerClear();
           Get.to(ViewPageScreen(
             barnchId: '',
           ));
@@ -122,33 +135,115 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Obx(
               () => Stack(
                 children: [
-                  ListView.builder(
-                      controller: scrollController,
-                      itemCount: listController.mainData.length,
-                      // itemCount: 10,
-                      shrinkWrap: true,
-                      itemBuilder: (BuildContext context, int index) {
-                        final data = listController.mainData[index];
+                  Stack(
+                    children: [
+                      //  Text('data'),
 
-                        return Slidable(
-                            endActionPane: ActionPane(
-                                motion: const BehindMotion(),
-                                children: [
-                                  SlidableAction(
-                                    backgroundColor: Colors.green,
-                                    icon: Icons.update,
-                                    label: 'Update',
-                                    onPressed: (context) {
-                                      Get.to(ViewPageScreen(
-                                        barnchId: data.id,
-                                      ));
-                                      log('updation statred');
-                                      //  log('--${data.id}=====');
-                                    },
-                                  ),
-                                ]),
-                            child: UserListTile(data: data));
-                      }),
+                      ListView.builder(
+                          controller: scrollController,
+                          itemCount: listController.mainData.length,
+                          shrinkWrap: true,
+                          itemBuilder: (BuildContext context, int index) {
+                            final data = listController.mainData[index];
+
+                            return (listController.mainData.isEmpty &&
+                                    listController.isLoading.value == false &&
+                                    listController
+                                            .isMainApiPaginationLoading.value ==
+                                        false)
+                                ? Text('data')
+                                : Slidable(
+                                    endActionPane: ActionPane(
+                                        motion: const BehindMotion(),
+                                        children: [
+                                          SlidableAction(
+                                            backgroundColor: Colors.green,
+                                            icon: Icons.update,
+                                            label: 'Update',
+                                            onPressed: (context) {
+                                              Get.to(ViewPageScreen(
+                                                barnchId: data.id,
+                                              ));
+                                              log('updation statred');
+                                              //  log('--${data.id}=====');
+                                            },
+                                          ),
+                                          SlidableAction(
+                                            backgroundColor: Colors.red,
+                                            icon: Icons.delete,
+                                            label: 'Delete',
+                                            onPressed: (context) {
+                                              showAlertDiloag(
+                                                  context, [data.id], index);
+                                            },
+                                          )
+                                        ]),
+                                    child: Card(
+                                      child: ListTile(
+                                        leading: Stack(
+                                          children: [
+                                            CircleAvatar(
+                                                radius: 30,
+                                                child: ClipOval(
+                                                    child:
+                                                        data.globalGalleryDetails !=
+                                                                null
+                                                            ? Image.network(
+                                                                data.globalGalleryDetails!
+                                                                    .url,
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                                height: 100,
+                                                                width: 100,
+                                                              )
+                                                            : Image.network(
+                                                                'https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg',
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                                height: 100,
+                                                                width: 100,
+                                                              ))),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 20, left: 30),
+                                            )
+                                          ],
+                                        ),
+                                        title: Text(data.name),
+                                        subtitle: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(data.email),
+                                            Text(data.mobile),
+                                          ],
+                                        ),
+                                        trailing: Switch(
+                                          value: listController
+                                              .mainData[index].invited == false,
+
+                                          activeColor: Colors.greenAccent,
+                                          inactiveTrackColor: Colors.redAccent,
+                                          // onChanged: toggleSwitch
+                                          onChanged: (bool value) {
+                                            var item =
+                                                listController.mainData[index];
+                                            item.invited = value;
+                                            listController.seletedValue(
+                                                index, data);
+                                          },
+                                        ),
+                                      ),
+                                    ));
+                          }),
+                      if (listController.switchState.value == true)
+                        LinearProgressIndicator(
+                          color: Colors.black,
+                        )
+                    ],
+                  ),
                   if (listController.isMainApiPaginationLoading.value == true)
                     Align(
                         alignment: Alignment.bottomCenter,

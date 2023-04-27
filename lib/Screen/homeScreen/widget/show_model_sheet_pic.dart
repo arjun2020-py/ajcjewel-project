@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../Utils/helper/heleper.dart';
-import '../controller/reigster_controller.dart';
+import '../controller/home_list_controller.dart';
 
-var registerController = Get.put(ReigsterController());
-Future<dynamic> OptionSheet(BuildContext context, var barnchId) {
+final listController = Get.put(HomeListController());
+
+Future<dynamic> ModelSheetImagePicker(BuildContext context, final String brId) {
   return showModalBottomSheet(
     backgroundColor: Colors.transparent,
     isScrollControlled: true,
@@ -30,7 +31,10 @@ Future<dynamic> OptionSheet(BuildContext context, var barnchId) {
                     child: ClipOval(
                       child: IconButton(
                           onPressed: () {
-                            registerController.picImageFromCamera(barnchId);
+                            listController.getPicCamera();
+
+                            if (listController.imageFile.value != null) {}
+                            // registerController.picImageFromCamera(barnchId);
                           },
                           icon: const Icon(Icons.camera_alt_outlined,
                               color: Colors.white)),
@@ -50,7 +54,10 @@ Future<dynamic> OptionSheet(BuildContext context, var barnchId) {
                     child: ClipOval(
                       child: IconButton(
                           onPressed: () {
-                            registerController.picImageFromGallery(barnchId);
+                            if (listController.imageFile.value != null) {
+                              listController.getPicGallary();
+                            }
+                            //  registerController.picImageFromGallery();
                           },
                           icon: const Icon(
                             Icons.photo_album_outlined,

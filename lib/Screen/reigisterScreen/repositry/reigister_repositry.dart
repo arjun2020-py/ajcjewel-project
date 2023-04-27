@@ -12,6 +12,8 @@ import '../model/register_reponsce_model.dart';
 
 class ReigsterRepositry {
   var dio = Dio();
+
+  selectOption() {}
   Future<Either<String, RegisterResponceModel>> RegisterList(
       {required FormData payload}) async {
     log('------------------------------reg.....');
@@ -34,9 +36,9 @@ class ReigsterRepositry {
 
       return Right(RegisterResponceModel.fromJson(response.data));
     } on DioError catch (dioError) {
-      // print('-------image${dioError.message}');
+      print('-------image${dioError.message}');
       // print('-------image${dioError.error}');
-      // print('-------${dioError.response}');
+      print('-------${dioError.response}');
 
       return Left(DioErrorResponseString.getErrorString(dioError));
     } catch (e) {

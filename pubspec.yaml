@@ -54,6 +54,7 @@ dependencies:
   hive_generator: ^2.0.0
   image_picker: ^0.8.7+1
   path_provider: ^2.0.14
+  syncfusion_flutter_datagrid: ^21.1.39
 dev_dependencies:
   flutter_test:
     sdk: flutter
